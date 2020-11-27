@@ -15,16 +15,11 @@ See lines 5-11 from server.js, which is your database connector.
 
 `
 
-let con = mysql.createConnection({
-
+    let con = mysql.createConnection({
     host: "localhost",
-    
     user: "root",
-    
     password: "password",
-    
-    database: "employees_db"
-});
+    database: "employees_db"});
 
 `
 
