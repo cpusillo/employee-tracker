@@ -14,10 +14,15 @@ See lines 5-11 from server.js, which is your database connector.
 `
 // Create the mysql connection, store in variable.
 let con = mysql.createConnection({
+
     host: "localhost",
+    
     user: "root",
+    
     password: "password",
+    
     database: "employees_db"
+    
 });
 `
 
