@@ -12,8 +12,8 @@ git clone git@github.com:cpusillo/employee-tracker.git
 
 Paste the employee_db.sql into MySQL workbench and run the queries. This will build your employee_db database.
 See lines 5-11 from server.js, which is your database connector.
+
 `
-// Create the mysql connection, store in variable.
 let con = mysql.createConnection({
 
     host: "localhost",
