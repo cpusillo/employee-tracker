@@ -5,6 +5,7 @@ Node.js command line app using MySQL, Inquirer, and Console.Table in order to vi
 
 ## How to install this application
 To install, simply clone the repository
+
 `
 git clone git@github.com:cpusillo/employee-tracker.git
 `
@@ -22,10 +23,10 @@ let con = mysql.createConnection({
     password: "password",
     
     database: "employees_db"
-    
 });
 `
 
 ## How to run this application
 Ensure your database is setup either by using the included employee_db.sql file or making your own and changing the code referenced above.
+
 Run `node server.js` to start the application
