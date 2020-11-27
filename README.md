@@ -14,6 +14,7 @@ Paste the employee_db.sql into MySQL workbench and run the queries. This will bu
 See lines 5-11 from server.js, which is your database connector.
 
 `
+
 let con = mysql.createConnection({
 
     host: "localhost",
@@ -24,6 +25,7 @@ let con = mysql.createConnection({
     
     database: "employees_db"
 });
+
 `
 
 ## How to run this application
