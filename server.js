@@ -49,11 +49,15 @@ function getUserInput() {
             else if (answer.startOptions === "Delete Data") {
                 deleteData();
             }
-            else if (answer.startOptions === "Exit") {
+            else if (answer.startOptions === "Exit"){
                 process.exit(1);
             }
         })
 }
+/*
+    addData() asks the user what information they want to add to
+    the database tables, including employees, roles and departments.
+*/
 function addData() {
     inquirer.prompt([
         {
@@ -63,7 +67,8 @@ function addData() {
             choices: [
                 "Add Employee",
                 "Add Role",
-                "Add Department"
+                "Add Department",
+                "Exit"
             ]
         }
     ]).then(function (answer) {
@@ -96,6 +101,7 @@ function addData() {
                     function (err) {
                         if (err) throw err;
                         console.log(`Added employee, ${answer.first_name} ${answer.last_name}`);
+                        getUserInput();
                     }
                 )
             })
@@ -127,6 +133,7 @@ function addData() {
                     function (err) {
                         if (err) throw err;
                         console.log(`Added role, ${answer.title} at salary ${answer.salary}`);
+                        getUserInput();
                     }
                 )
             });
@@ -147,12 +154,22 @@ function addData() {
                     function (err) {
                         if (err) throw err;
                         console.log(`Added department, ${answer.name}`);
+                        getUserInput();
+                        
                     }
                 )
             });
         }
-    })
+        else if (answer.add === "Exit"){
+            getUserInput();
+        }
+    });
 }
+
+/*
+    viewData() asks the user what information from the database
+    they want to view, employees, departments, roles.
+*/
 function viewData() {
     inquirer.prompt([
         {
@@ -163,7 +180,8 @@ function viewData() {
                 "View All Employees",
                 "View All Roles",
                 "View All Departments",
-                "View All Employees, Roles, Departments"
+                "View All Employees, Roles, Departments",
+                "Exit"
             ]
         }
     ]).then(function (answer) {
@@ -171,28 +189,38 @@ function viewData() {
             case "View All Employees":
                 con.query("SELECT * FROM employee", function (err, result) {
                     console.table(result);
+                    getUserInput();
                 });
                 break;
             case "View All Roles":
                 con.query("SELECT * FROM role", function (err, result) {
                     console.table(result);
+                    getUserInput();
                 });
                 break;
             case "View All Departments":
                 con.query("SELECT * FROM department", function (err, result) {
                     console.table(result);
+                    getUserInput();
                 });
                 break;
             case "View All Employees, Roles, Departments":
                 con.query("SELECT e.id, e.first_name, e.last_name, r.title, r.salary, d.name FROM employee e INNER JOIN role r on e.role_id = r.id INNER JOIN department d on r.department_id = d.id ORDER BY d.name;", function (err, result) {
                     console.table(result);
+                    getUserInput();
                 })
                 break;
+            case "Exit":
+                getUserInput();
+            break;
         }
     });
 }
-
-function updateData() {
+/*
+    updateData() asks the user what database information they want to
+    alter, employee roles.
+*/
+function updateData(){
     inquirer.prompt([
         {
             name: "update",
@@ -202,20 +230,20 @@ function updateData() {
                 "Update Employee Role"
             ]
         },
-    ]).then(function (answer) {
-        if (answer.update === "Update Employee Role") {
+    ]).then(function(answer){
+        if (answer.update === "Update Employee Role"){
             inquirer.prompt([
                 {
                     name: "role_id",
                     type: "number",
                     message: "Enter the role id: "
-                },
+                 },
                 {
-                    name: "id",
-                    type: "number",
-                    message: "Enter the employee id: "
+                   name: "id",
+                   type: "number",
+                   message: "Enter the employee id: "
                 }
-            ]).then(function (answer) {
+            ]).then(function(answer){
                 con.query("UPDATE employee SET role_id = ? WHERE ?;", [
                     {
                         role_id: answer.role_id
@@ -224,17 +252,21 @@ function updateData() {
                         id: answer.id
                     }
                 ],
-                    function (error) {
-                        if (error) throw error;
-                        console.log(`Updated employee with id ${answer.id} to role ${answer.role_id}`)
-                        getUserInput();
-                    });
-            })
+                function(error){
+                    if (error) throw error;
+                    console.log(`Updated employee with id ${answer.id} to role ${answer.role_id}`)
+                    getUserInput();
+                });
+            });
         }
-    })
+    });
 }
 
-function deleteData() {
+/*
+    deleteData() asks the user what database information they want
+    to delete, employees, roles, departments.
+*/
+function deleteData(){
     inquirer.prompt([
         {
             name: "delete",
@@ -246,57 +278,59 @@ function deleteData() {
                 "Delete Department"
             ]
         }
-    ]).then(function (answer) {
-        if (answer.delete === "Delete Employee") {
+    ]).then(function(answer){
+        if (answer.delete === "Delete Employee"){
             inquirer.prompt([
                 {
                     name: "id",
                     type: "number",
                     message: "Enter Employee ID #: "
                 },
-            ]).then(function (answer) {
-                con.query("DELETE FROM employee WHERE ? ", [
-                    { id: answer.id }
-                ], function (error) {
+            ]).then(function(answer){
+                con.query("DELETE FROM employee WHERE ? ",[
+                    {id: answer.id}
+                ], function(error){
                     if (error) throw error;
                     console.log(`Employee with id ${answer.id} deleted`);
+                    getUserInput();
                 }
                 )
             });
         }
-        else if (answer.delete === "Delete Role") {
+        else if (answer.delete === "Delete Role"){
             inquirer.prompt([
                 {
                     name: "id",
                     type: "number",
                     message: "Enter Role ID #: "
                 },
-            ]).then(function (answer) {
-                con.query("DELETE FROM role WHERE ? ", [
-                    { id: answer.id }
-                ], function (error) {
+            ]).then(function(answer){
+                con.query("DELETE FROM role WHERE ? ",[
+                    {id: answer.id}
+                ], function(error){
                     if (error) throw error;
                     console.log(`Role with id ${answer.id} deleted`);
-                }
-                )
+                    getUserInput();
+                });
             });
         }
-        else if (answer.delete === "Delete Department") {
+        else if (answer.delete === "Delete Department"){
             inquirer.prompt([
                 {
                     name: "id",
                     type: "number",
                     message: "Enter Department ID #: "
                 },
-            ]).then(function (answer) {
-                con.query("DELETE FROM department WHERE ? ", [
-                    { id: answer.id }
-                ], function (error) {
+            ]).then(function(answer){
+                con.query("DELETE FROM department WHERE ? ",[
+                    {id: answer.id}
+                ], function(error){
                     if (error) throw error;
                     console.log(`Employee with id ${answer.id} deleted`);
+                    getUserInput();
                 }
                 )
             });
         }
-    })
+    });
 }
