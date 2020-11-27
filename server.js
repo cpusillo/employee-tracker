@@ -13,10 +13,9 @@ let con = mysql.createConnection({
 // Connect to the database.
 con.connect((err) => {
     if (err) throw err;
-    console.log("Connected!");
     getUserInput();
 });
-
+console.log("Welcome to the Employee DB!\n Use the list below to get started.")
 /*
     getUserInput() uses inquirer to determine if the user wants to simply
     view the database, add to the database, or delete from the database.
